@@ -43,7 +43,7 @@ def extract_claims(text):
         return []
         
     prompt = f"""
-    Analyze the following text and extract a list of up to 4-5 main objective, factual statements or claims.
+    Analyze the following text and extract a list of up to 4 main objective, factual statements or claims.
     Return ONLY the claims, one per line. Do not number them, use bullet points, or add extra introductory text.
     
     Text:
@@ -89,7 +89,6 @@ if uploaded_file is not None:
             # --- BATCH SEARCH ENGINE PROCESSING ---
             bundled_evidence_prompt = ""
             
-            # Collect all web evidence first using Tavily
             with st.spinner("Searching the live web for evidence..."):
                 for i, claim in enumerate(claims, 1):
                     st.write(f"🔍 Gathering data for claim {i}/{len(claims)}: *{claim}*")
@@ -113,7 +112,7 @@ if uploaded_file is not None:
                 DATA TO ANALYZE:
                 {bundled_evidence_prompt}
                 
-                For each claim block, output your verdict strictly using this exact marker format so the frontend can parse it:
+                For each claim block, output your verdict strictly using this exact marker format:
                 
                 [CLAIM_START]
                 ### Claim: [Write the original claim here]
@@ -127,7 +126,7 @@ if uploaded_file is not None:
                     final_response = model.generate_content(final_verification_prompt)
                     report_text = final_response.text
 
-                    # Calculate PM Trust Score Metrics dynamically based on text keywords
+                    # Calculate Document Trust Score Metrics
                     trust_score = 100
                     false_count = report_text.count("Verdict: FALSE")
                     inaccurate_count = report_text.count("Verdict: INACCURATE")
@@ -136,7 +135,6 @@ if uploaded_file is not None:
                     trust_score -= inaccurate_count * 10
                     trust_score = max(trust_score, 0)
 
-                    # Display Trust Metric Block
                     st.metric(
                         label="📄 Overall Document Trust Score",
                         value=f"{trust_score}/100",
@@ -144,7 +142,7 @@ if uploaded_file is not None:
                     )
                     st.markdown("---")
 
-                    # Parse out the blocks safely and map color indicators individually
+                    # Parse and display color indicators
                     claim_blocks = report_text.split("[CLAIM_START]")
                     for block in claim_blocks:
                         if "[CLAIM_END]" in block:
@@ -162,4 +160,4 @@ if uploaded_file is not None:
         else:
             st.warning("No clear factual statements could be parsed from this PDF layout.")
     else:
-        st.error("The uploaded PDF could not be read properly.")
+        st.error("The uploaded PDF could not be read properly.") 
