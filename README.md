@@ -144,6 +144,10 @@ streamlit run app.py
 6. The system calculates a document trust score.
 
 ---
+## Live Demo
+
+🚀 **Try FactGuard here:**  
+[FactGuard Live App](https://fact-check-agent-factguard-hicm9bpgcpahfzstuvupww.streamlit.app)
 
 ## 📊 Example Output
 
