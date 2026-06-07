@@ -1,6 +1,6 @@
-streamlit>=1.35.0
-google-generativeai>=0.8.0
-PyMuPDF>=1.24.0
-pdfplumber>=0.11.0
-tavily-python>=0.3.3
-python-dotenv>=1.0.0
+streamlit
+groq
+tavily-python
+PyMuPDF
+pdfplumber
+python-dotenv
